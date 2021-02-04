@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, Image } from "react-native";
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Button, Image } from "react-native";
 import firebase from "../../firebaseConection";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, Link } from "@react-navigation/native";
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 console.disableYellowBox = true;
+
+
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -68,6 +71,15 @@ export default function Login() {
                 onPress={logar}
             />
 
+            <TouchableOpacity style={ styles.btn} onPress={() => navigation.navigate('Recuperar')}>
+            <FontAwesome 
+            name="question-circle"
+            size={25}
+            color="black"
+            />
+            <Text style={ styles.btnText}>Esqueceu a Senha?</Text>
+            </TouchableOpacity>
+
             {/* <Button
                 marginTop={10}
                 title="deslogar - teste"
@@ -109,5 +121,29 @@ const styles = StyleSheet.create({
         borderColor: "white",
         borderWidth: 2,
         marginBottom: 15
-    }
+    },
+    btn: {
+        width: 200,
+        marginTop: 30,
+        marginLeft: 'auto',
+        marginRight:'auto',
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        paddingTop: 5,
+        paddingBottom: 5,
+        paddingLeft: 10,
+        paddingRight: 10,
+        backgroundColor: "white",
+        borderRadius: 16,
+        shadowColor: "black",
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        
+        elevation: 5,
+      }
 })

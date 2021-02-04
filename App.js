@@ -8,6 +8,7 @@ import Login from './src/pages/Login';
 import CadastroUser from './src/pages/CadastroUser';
 import CadastroPet from './src/pages/CadastroPet';
 import ListaPet from './src/pages/ListaPet';
+import RecSenha from './src/pages/Recuperar';
 import Home from './src/pages/Home';
 const Stack = createStackNavigator();
 
@@ -24,6 +25,7 @@ function App() {
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="CadastroPet" component={CadastroPet} />
         <Stack.Screen name="ListaPet" component={ListaPet} />
+        <Stack.Screen name="Recuperar" component={RecSenha} />
       </Stack.Navigator>
     </NavigationContainer>
   );

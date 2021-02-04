@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, Button, StyleSheet, FlatList } from "react-native";
+import { View, Text, Button, StyleSheet, TouchableOpacity, FlatList } from "react-native";
 import firebase from "../../firebaseConection";
 import { useNavigation, StackActions } from "@react-navigation/native";
 import PetList from '../../PetList';
 import Header from '../Header';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 export default function ListaPet(){
     const [pets, setPets] = useState([]);
@@ -49,10 +50,14 @@ export default function ListaPet(){
             ) }
             />
 
-            <Button 
-            title="Cadastrar Animal"
-            onPress={()=> navigation.navigate('CadastroPet')}
+            <TouchableOpacity style={ style.btnEdit} onPress={() => navigation.navigate('CadastroPet')}>
+            <FontAwesome 
+            name="plus-circle"
+            size={25}
+            color="white"
             />
+            <Text style={ style.btnText}>Cadastrar Animal</Text>
+            </TouchableOpacity>
         </View>
     )
 }
@@ -70,6 +75,40 @@ const style = StyleSheet.create({
         marginLeft:"auto",
         marginRight: "auto",
         marginBottom: 10
-      }
-
+      },
+    btnEdit: {
+      width: 160,
+      marginTop: 18,
+      marginLeft: 'auto',
+      marginRight:'auto',
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+      paddingTop: 5,
+      paddingBottom: 5,
+      paddingLeft: 10,
+      paddingRight: 10,
+      backgroundColor: "blue",
+      borderRadius: 16,
+      shadowColor: "black",
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      
+      elevation: 5,
+    },
+    containerList:{
+      flex:1,
+      flexDirection: 'column',
+      marginBottom: 10,
+      padding: 10,
+      borderRadius: 5,
+  },
+  btnText: {
+    paddingLeft: 10,
+    color: "white"
+  },
 });

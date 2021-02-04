@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, Image, ScrollView, Picker } from "react-native";
 import firebase from "../../firebaseConection";
 import { useNavigation } from "@react-navigation/native";
@@ -16,9 +16,103 @@ export default function CadastroUser() {
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
 
+  var btn = 'Cadastro';
+  const user = firebase.auth().currentUser;
+  if(user != null) {
+    btn = 'Alterar';
+  }
+
+  function logar(email, password) {
+    firebase.auth().signInWithEmailAndPassword(email, password)
+        .then((value) => {
+          navigation.navigate('Perfil');
+        })
+        .catch((error) => {
+            alert(error.code);
+        })
+
+}
+  
+   useEffect(()=> {
+ 
+    async function setDados(){
+     
+     if(user != null){
+      await firebase.database().ref('usuarios').child(user.uid).on('value', (snapshot)=>{
+        setName(snapshot.val().nome);
+        setEmail(snapshot.val().email);
+        setPassword(snapshot.val().senha);
+        setNumber(snapshot.val().telefone);
+        setLocation(snapshot.val().endereco);
+        setCity(snapshot.val().cidade);
+        setState(snapshot.val().estado);
+    
+      });
+     }
+      
+    }
+  
+      setDados();
+    
+   }, []);
+
+  
+
 
   async function cadastrar() {
-    await firebase.auth().createUserWithEmailAndPassword(email, password)
+
+    if(user !=null ){
+
+      if(email != user.email ){
+        user.updateEmail(email).updatePassword(password).then((value) => {
+          //alert(value.user.uid);
+          firebase.database().ref('usuarios').child(user.uid).set({
+            nome: name,
+            telefone: number,
+            endereco: location,
+            cidade: city,
+            estado: state,
+            email: email,
+            senha: password
+          })
+  
+        
+            alert('Usuario alterado com sucesso!');
+            logar(email, password);
+        
+          
+        })
+        .catch((error) => {
+          alert('Algo deu errado!');
+        })
+
+      } else {
+        user.updatePassword(password).then((value) => {
+          //alert(value.user.uid);
+          firebase.database().ref('usuarios').child(user.uid).set({
+            nome: name,
+            telefone: number,
+            endereco: location,
+            cidade: city,
+            estado: state,
+            email: email,
+            senha: password
+          })
+  
+        
+            alert('Usuario alterado com sucesso!');
+            navigation.navigate('Perfil');
+        
+          
+        })
+        .catch((error) => {
+          alert('Algo deu errado!');
+        })
+      }
+      
+    } 
+    else {
+      await firebase.auth().createUserWithEmailAndPassword(email, password)
       .then((value) => {
         //alert(value.user.uid);
         firebase.database().ref('usuarios').child(value.user.uid).set({
@@ -27,7 +121,8 @@ export default function CadastroUser() {
           endereco: location,
           cidade: city,
           estado: state,
-          email: email
+          email: email,
+          senha: password
         })
 
         alert('Usuario criado com sucesso!');
@@ -44,6 +139,8 @@ export default function CadastroUser() {
       .catch((error) => {
         alert('Algo deu errado!');
       })
+    }
+    
   }
 
   return (
@@ -116,7 +213,7 @@ export default function CadastroUser() {
 
         <Button
           marginTop={10}
-          title="Cadastrar"
+          title={btn}
           onPress={cadastrar}
         />
 
