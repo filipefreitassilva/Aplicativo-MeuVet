@@ -36,6 +36,10 @@ export default function ListaPet(){
 
     const navigation = useNavigation();
 
+    async function handleDelete(key){
+      await firebase.database().ref('animais').child(key).remove();
+    }
+
     return(
         <View style={style.container}>
             <Header/>
@@ -46,7 +50,7 @@ export default function ListaPet(){
             data={pets}
             keyExtractor={item => item.key}
             renderItem={ ({ item }) => (
-            <PetList data={item}/>
+            <PetList deleteItem={handleDelete} data={item}/>
             ) }
             />
 
@@ -88,7 +92,7 @@ const style = StyleSheet.create({
       paddingBottom: 5,
       paddingLeft: 10,
       paddingRight: 10,
-      backgroundColor: "blue",
+      backgroundColor: "#29556E",
       borderRadius: 16,
       shadowColor: "black",
       shadowOffset: {
